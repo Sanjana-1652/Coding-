@@ -1,0 +1,319 @@
+Sequence:
+	Used to generate numeric numbers in sequential order.
+	syntax:
+	CREATE SEQUENCE sequence_name
+	START WITH n
+	{INCREMENT BY n}==>default increment is 1.
+	{MAXVALUE n || NOMAXVALUE}
+	{MINVALUE n|| NOMINVALUE}
+	{CYCLE || NOCYCLE}
+	{CACHE n|| NOCACHE}
+If cycle present in the command, you should specify MINVALUE and CACHE. at a time sequence will generate 20 numbers in buffer if we specify NOCACHE. 
+without this clause you can not create a sequence which does have CYCLE option.
+
+Cycle is an option which generates numbers by going to the MINVALUE after reaching MAXIMUM VALUE. basically if you do not specify cycle, sequence will be expired after generating final number which is equalent to MAXVALUE.
+
+When we create sequence system automatically creates two pseudo columns. 
+i. CURRVAL : this column returns current value of the sequecne. 
+ii. NEXTVAL : this one returns next value of the sequence.
+
+When we create sequence initially you do not have any value in CURRVAL. whenever you access value from NEXTVAL column, that value will be sent to you and simuntaniously will be coverted as the value of CURRVAL column. according to the increment nextvalue of the valueof CURRVAL column will be maintained in NEXTVAL column. if you access nextval column value once again, that value will farwarded to the user and simuntaniously updates the value in CURVAL column and according to the increment the next value will be maintained in NEXTVAL column.
+	Syntax for accessing values from Pseudo columns:
+	sequence_name.Pseudo_colname
+
+Demo
+SQL> create sequence n
+  2  start with 1
+  3  maxvalue 100;
+
+Sequence created.
+
+SQL> insert into nagam
+  2  values(n.nextval,'&stdname','&stdaddress');
+Enter value for stdname: Nagamani
+Enter value for stdaddress: Guntur
+old   2: values(n.nextval,'&stdname','&stdaddress')
+new   2: values(n.nextval,'Nagamani','Guntur')
+
+1 row created.
+
+SQL> /
+Enter value for stdname: Giriprasad
+Enter value for stdaddress: Tenali
+old   2: values(n.nextval,'&stdname','&stdaddress')
+new   2: values(n.nextval,'Giriprasad','Tenali')
+
+1 row created.
+
+SQL> /
+Enter value for stdname: Ramarao
+Enter value for stdaddress: Tenali
+old   2: values(n.nextval,'&stdname','&stdaddress')
+new   2: values(n.nextval,'Ramarao','Tenali')
+
+1 row created.
+
+SQL> /
+Enter value for stdname: Sankar
+Enter value for stdaddress: Guntur
+old   2: values(n.nextval,'&stdname','&stdaddress')
+new   2: values(n.nextval,'Sankar','Guntur')
+
+1 row created.
+
+SQL> /
+Enter value for stdname: Vamsi
+Enter value for stdaddress: Hyderabad
+old   2: values(n.nextval,'&stdname','&stdaddress')
+new   2: values(n.nextval,'Vamsi','Hyderabad')
+
+1 row created.
+
+SQL> /
+Enter value for stdname: Jhonny
+Enter value for stdaddress: Tirupati
+old   2: values(n.nextval,'&stdname','&stdaddress')
+new   2: values(n.nextval,'Jhonny','Tirupati')
+
+1 row created.
+
+SQL> select * from nagam;
+
+    STDNO STDNAME                   STDADDRESS
+--------- ------------------------- -------------------------
+        2 Giriprasad                Tenali
+        3 Ramarao                   Tenali
+        4 Sankar                    Guntur
+        5 Vamsi                     Hyderabad
+        1 Nagamani                  Guntur
+        6 Jhonny                    Tirupati
+
+6 rows selected.
+
+SQL> create sequence n
+  2  start with 5
+  3  increment by 5
+  4  maxvalue 100
+  5  minvalue 5
+  6  cycle
+  7  nocache;
+
+Sequence created.
+
+
+
+Drop Sequence:
+	USed to drop a sequence.
+	syntax:
+	DROP SEQUENCE sequence_name
+ex:
+SQL> drop sequence supergiri;
+
+Sequence dropped.	
+=======================================================
+Cluster:
+	This object is totally meant for reducing memory occupation in case of duplication of data.First create a column as a cluster and after that during creation of table link the column in which you want to reduce memory occupation to the clustered column. for doing this this column should contain same datatype what the cluster column does.
+	syntax:
+	CREATE CLUSTER cluster_name
+	(col_name datatype,col_name datatype....)
+
+Linking a column to the cluster column during creation of table:
+	syntax:
+	CREATE TABLE table_name
+	(col_name datatype,
+	col_name datatype,
+	col_name datatype,
+	...........................
+	col_name datatype)
+	CLUSTER cluster_name(col_name,col_name)
+col_name : here specify the column name in this table for which we are putting link with cluster column.
+
+
+Demo
+SQL> create cluster nagam_clu
+  2  (address varchar2(25));
+
+Cluster created.
+
+SQL> create table student_info
+  2  (stdno number,
+  3  stdname varchar2(25),
+  4  city varchar2(25))
+  5  cluster nagam_clu(city);
+
+Table created.
+
+For inserting data in the table which does have link with cluster, we have to  create index for the cluster.
+	syntax:
+	CREATE INDEX index_name
+	ON CLUSTER cluster_name
+SQL> insert into student_info
+  2  values(1,'Nagamani','Guntur');
+insert into student_info
+            *
+ERROR at line 1:
+ORA-02032: clustered tables cannot be used before the cluster index is built
+
+
+SQL> create index nagam_clu_index
+  2  on cluster nagam_clu;
+
+Index created.
+
+SQL> insert into student_info
+  2  values(1,'Nagamani','Guntur');
+
+1 row created.
+
+SQL> select * from student_info;
+
+    STDNO STDNAME                   CITY
+--------- ------------------------- -------------------------
+        1 Nagamani                  Guntur
+
+SQL> insert into student_info
+  2  values(2,'Giri Prasad','Guntur');
+
+1 row created.
+
+SQL> select * from student_info;
+
+    STDNO STDNAME                   CITY
+--------- ------------------------- -------------------------
+        1 Nagamani                  Guntur
+        2 Giri Prasad               Guntur
+
+SQL> create table nagam_2
+  2  (empno number
+  3  
+SQL> create table nagam_2
+  2  (empno number,ename varchar2(25),eaddr varchar2(25))
+  3  cluster nagam_clu(eaddr);
+
+Table created.
+
+SQL> insert into nagam_2
+  2  values(100,'NAGAMANI','Guntur');
+
+1 row created.
+
+SQL> select * from student_info;
+
+    STDNO STDNAME                   CITY
+--------- ------------------------- -------------------------
+        1 Nagamani                  Guntur
+        2 Giri Prasad               Guntur
+
+SQL> select * from nagam_2;
+
+    EMPNO ENAME                     EADDR
+--------- ------------------------- -------------------------
+      100 NAGAMANI                  Guntur
+
+Droping of Cluster:
+	For droping cluster first up all we have to drop all those tables in which we have used cluster.
+	syntax:
+	DROP CLUSTER cluster_name
+	{INCLUDING TABLES}
+if our cluster isnot connected with table, you can drop the cluster without specifying INCLUDING TABLES. if cluster has been used in any table(s), you have to include this option.
+For knowing the tables in which we have used CLUSTER , implement a select statement on USER_TABLES.
+SQL> select * from user_tables where cluster_name='NAGAM_CLU';
+	
+SQL> drop cluster nagam_clu;
+drop cluster nagam_clu
+*
+ERROR at line 1:
+ORA-00951: cluster not empty
+
+
+SQL> drop cluster nagam_clu including tables;
+Cluster dropped.
+=======================================================
+View:
+	This is nothing but a select statement that is we are going to create an object with a select statement. this object is called as View. This one does have any storage capacity like table. And moreover that this object doesn't store in memory. this one stores in Virutal Memory that's why this is also called as VIRTUAL OBJECT.
+For executing the inner statement of view, implement a select statement on view.
+	syntax:
+	CREATE {OR REPLACE} {FORCE} VIEW view_name
+	AS select statement {WITH CHECK OPTION}
+
+The table what we have used in select statement of view is called as BASETABLE of view.
+
+Ex:
+SQL> create view v1
+  2  as select * from emp where deptno=20 and sal>=1500;
+View created.
+
+SQL> select * from v1;
+    EMPNO ENAME      JOB             MGR HIREDATE        SAL     
+--------- ---------- --------- --------- --------- --------- ----
+     7566 JONES      MANAGER        7839 02-APR-81      2975            
+     7788 SCOTT      ANALYST        7566 09-DEC-82      3000            
+     7902 FORD       ANALYST        7566 03-DEC-81      3000            
+
+For having information regarding view we have to implement select staement on 2 system tables.
+1. tab: This one tells whether view has created or not.
+2. USER_VIEWS: this one shows viewname and its select statement also. 
+
+We can implement all dml statements on view. but those things will be diverted to the base table on which the view has been created. These dml statements can be implemented on only a view which does have a single base table.
+
+If our view does have a single basetable then that view is called as SIMPLE VIEW.
+If view does have mutiple base tables, then it is called COMPLEX view. On this view you can implement only select statement from the DML list.
+
+Options:
+Replace: for replacing the select statement what we have specified inside view.
+ex:
+SQL> create or replace view v1
+  2  as select * from nagam;
+View created.
+
+SQL> select * from v1;
+    STDNO STDNAME                   STDADDRESS
+--------- ------------------------- --------------------
+        2 Giriprasad                Tenali
+        3 Ramarao                   Tenali
+        4 Sankar                    Guntur
+        5 Vamsi                     Hyderabad
+        1 Nagamani                  Guntur
+        6 Jhonny                    Tirupati
+
+6 rows selected.
+
+SQL> select * from user_views where view_name='V1';
+
+VIEW_NAME       
+TEXT                                                    
+--------------------------------------------------------
+V1
+select "STDNO","STDNAME","STDADDRESS" from nagam
+
+
+2)Force: 
+	Actually without having basetable in the user you can not create view.
+If you want to create a view without having its basetable in user, use this option. but you can not use until unless you create basetable.
+
+SQL> create view v2
+  2  as select * from x;
+as select * from x
+                 *
+ERROR at line 2:
+ORA-00942: table or view does not exist
+
+
+SQL> create force view v2
+  2  as select * from x;
+
+Warning: View created with compilation errors.
+
+SQL> select * from v2;
+select * from v2
+              *
+ERROR at line 1:
+ORA-04063: view "SCOTT.V2" has errors
+
+Drop view: Used to remove view.
+	syntax:
+	DROP VIEW view_name
+
+=======================================================
+
+

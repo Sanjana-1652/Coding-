@@ -1,0 +1,635 @@
+ORDER BY :
+	Used sort the rows according to the specified column.
+	syntax:	ORDER BY columname {ASC|DESC}
+		this is only for result purpose. this is has to be used incombination of SELECT statement only.
+SQL>select * from nagam;
+
+    STDNO STDNAME                   STDADDRESS
+--------- ------------------------- -----------------
+        2 Giriprasad                Tenali
+        3 Ramarao                   Tenali
+        4 Sankar                    Guntur
+        5 Vamsi                     Hyderabad
+        1 Nagamani                  Guntur
+        6 Jhonny                    Tirupati
+
+6 rows selected.
+
+SQL>select * from nagam order by stdno;
+
+    STDNO STDNAME                   STDADDRESS
+--------- ------------------------- -----------------
+        1 Nagamani                  Guntur
+        2 Giriprasad                Tenali
+        3 Ramarao                   Tenali
+        4 Sankar                    Guntur
+        5 Vamsi                     Hyderabad
+        6 Jhonny                    Tirupati
+
+6 rows selected.
+
+SQL>select * from nagam order by stdno desc;
+
+    STDNO STDNAME                   STDADDRESS
+--------- ------------------------- -----------------
+        6 Jhonny                    Tirupati
+        5 Vamsi                     Hyderabad
+        4 Sankar                    Guntur
+        3 Ramarao                   Tenali
+        2 Giriprasad                Tenali
+        1 Nagamani                  Guntur
+
+6 rows selected.
+========
+Sql plus commands:
+
+We do have environment variables in sql working area and we can set values for these variable by using SET command.
+
+1. sqlprompt:
+	Defines SQL PROMPT.
+	syntax:
+	SET SQLPROMPT prompt
+ex:
+SQL> set sqlprompt GIRI
+GIRI
+GIRIset sqlprompt SQL>
+SQL>
+
+2. sqlterminator:
+	We can define a new terminator for sql command in the place of ;.
+	syntax:
+	SET SQLTERMINATOR character
+
+SQL>SET SQLTERMINATOR +
+SQL>SELECT * FROM STUDENT;
+  2  
+SQL>SELECT * FROM STUDENT+
+no rows selected
+
+SQL>SET SQLTERMINATOR ;
+
+3. TIME : displays time
+	syntax:
+	SET TIME ON/OFF
+
+SQL>SET TIME ON
+16:14:07 SQL>SET TIME OFF
+SQL>
+4. ECHO : displays the file content on screen when we execuate a file content with the help START and @ commands.
+	syntax:
+	SET ECHO OFF/ON
+
+SQL>@C:\NAGAM.SQL
+TNAME                          TABTYPE
+------------------------------ -------
+ASD                            TABLE
+SQL>SET ECHO ON
+SQL>@C:\NAGAM.SQL
+SQL>SELECT * FROM TAB
+  2  /
+TNAME                          TABTYPE C
+------------------------------ ------- -
+5. AUTOCOMMIT:
+	used to perform commit immediately or after specified transactions after dml statements.
+	syntax:
+	SET AUTOCOMMIT ON/OFF/N
+n: after how many transaction your system has to perform commit command.
+
+SQL>set autocommit on
+SQL>delete from asd;
+5 rows deleted.
+Commit complete.
+SQL>set autocommit 2
+SQL>delete from students;
+4 rows deleted.
+SQL>delete from std_Details;
+4 rows deleted.
+Commit complete.
+SQL>set autocommit off
+
+6. newpage:
+	define howmany lines you want to leave after each page in a select statement result.
+	syntax:
+	SET NEWPAGE n
+7. pagesize:
+	define howmany rows you want to display in each page of a select statement result.
+	syntax:
+	SET PAGESIZE n
+ex:
+SQL>set pagesize 8
+SQL>select * from tab;
+SQL>set newpage 5
+SQL>select * from tab;
+SQL>set newpage 1
+SQL>select * from tab;
+SQL>set pagesize 25
+SQL>select * from tab;
+
+8. LINESIZE:
+	define howmany characters you have to show in each line.
+	syntax:
+	SET LINESIZE n
+	defaulty it would be 80
+SQL>set linesize 50
+SQL>select * from emp;
+SQL>set linesize 100
+SQL>select * from emp;
+
+9. SQLCASE:
+	makes character values case into upper/lower. This one acts on data.
+	syntax:
+	SET SQLCASE UPPER/LOWER/NORMAL
+SQL>set sqlcase upper
+SQL>insert into students
+  2  values(10,'nagamani','tirupati',90,90,90);
+
+1 row created.
+
+SQL>select * from students;
+
+      SNO SNAME                SADDR                    
+--------- -------------------- -------------------
+       10 NAGAMANI             TIRUPATI                 
+
+10. HEADING:
+	Trun on/off headings of columns.
+	syntax:
+	SET HEADING ON/OFF
+SQL>SET HEADING OFF
+SQL>SELECT * FROM DEPT;
+
+       10 ACCOUNTING     NEW YORK
+       20 RESEARCH       DALLAS
+       30 SALES          CHICAGO
+       40 OPERATIONS     BOSTON
+SQL>SET HEADING ON
+SQL>SELECT * FROM DEPT;
+
+   DEPTNO DNAME          LOC
+--------- -------------- --------
+       10 ACCOUNTING     NEW YORK
+       20 RESEARCH       DALLAS
+       30 SALES          CHICAGO
+       40 OPERATIONS     BOSTON
+
+11. space: defines space in between columns.
+	syntax:
+	SET SPACE N 
+	default : 1
+
+SQL>select * from dept;
+
+   DEPTNO DNAME          LOC
+--------- -------------- -------------
+       10 ACCOUNTING     NEW YORK
+       20 RESEARCH       DALLAS
+       30 SALES          CHICAGO
+       40 OPERATIONS     BOSTON
+
+SQL>set space 4
+SQL>select * from dept;
+
+   DEPTNO    DNAME             LOC
+---------    --------------    -----------
+       10    ACCOUNTING        NEW YORK
+       20    RESEARCH          DALLAS
+       30    SALES             CHICAGO
+       40    OPERATIONS        BOSTON
+
+SQL>set space 1
+SQL>select * from dept;
+
+   DEPTNO DNAME          LOC
+--------- -------------- -------------
+       10 ACCOUNTING     NEW YORK
+       20 RESEARCH       DALLAS
+       30 SALES          CHICAGO
+       40 OPERATIONS     BOSTON
+12.HEADSEP:	
+	Define the character which you want to use as column heading seperator instead of single piping symbol.
+	syntax:
+	SET HEADSEP symbol
+SQL>set headsep +
+SQL>column deptno heading "Dept+Number"
+SQL>select * from dept;
+     Dept
+   Number DNAME          Location
+--------- -------------- -----------
+       10 ACCOUNTING     NEW YORK
+=======================================================
+COLUMN:
+	
+	i.used to format specified column.
+
+	syntax:
+	COLUMN col_name FORMAT format
+numaric format:
+9: refers a single digit location.
+
+SQL>column sal format 9,99,999
+SQL>select * from emp;
+
+Character format:
+	syntax:
+	COLUMN col_name FORMAT An {Trunc||word_wrap}
+a: means alphabets.
+n: how many letters you want to show in each line of entry.
+
+SQL>column job format a5
+SQL>select * from emp;
+
+    EMPNO ENAME      JOB        
+--------- ---------- ----- --
+     7369 SMITH      CLERK      
+     7499 ALLEN      SALES      
+                     MAN
+
+     7521 WARD       SALES      
+                     MAN
+SQL>column job format a5 trunc
+SQL>select * from emp;
+
+    EMPNO ENAME      JOB         MGR 
+--------- ---------- ----- --------- 
+     7369 SMITH      CLERK      7902 
+     7499 ALLEN      SALES      7698 
+     7521 WARD       SALES      7698 
+     7566 JONES      MANAG      7839 
+     7654 MARTIN     SALES      7698 
+SQL>column job format a5 word_Wrap
+
+	ii. Defines a new name for the column in query result.
+	syntax:
+	COLUMN col_name HEADING new_col_name
+
+here you can use a single piping symbol with shows given column name in multiple lines.
+
+SQL>column loc heading Location
+SQL>select * from dept;
+
+   DEPTNO DNAME          Location
+SQL>column deptno heading "Department|Number"
+SQL>select * from dept;
+
+Department
+    Number DNAME          Location
+---------- -------------- ------------
+        10 ACCOUNTING     NEW YORK
+SQL>select * from emp;
+
+                                                                   Department
+    EMPNO ENAME      JOB         MGR HIREDATE        SAL      COMM     Number
+--------- ---------- ----- --------- --------- --------- --------- ----------
+     7369 SMITH      CLERK      7902 17-DEC-80       800                   20
+
+
+For clearing all formats to different which have defined we have to go for clear command.
+	syntax:
+	CL{eAR} COLUMNS
+SQL>CL COLUMNS
+columns cleared
+=======================================================
+
+BREAK:
+	This command is used to group the data of a column.
+syntax:	BREAK ON col_name SKIP n
+n: no. of lines going to be leaft after each group.
+
+when we are implementing a select statement if our result contains breaked column then you have to including an order by clause on the breaked coloumn in select statement.
+
+
+Compute : 
+	This one performs group functions based on breaked column.
+	syntax:
+	COMPUTE  function OF coluname ON breakcol_name
+
+SQL>break on deptno skip 1
+SQL>select deptno,empno,ename,sal from emp order by deptno;
+
+   DEPTNO     EMPNO ENAME            SAL
+--------- --------- ---------- ---------
+       10      7782 CLARK           2450
+               7839 KING            5000
+               7934 MILLER          1300
+
+       20      7369 SMITH            800
+               7876 ADAMS           1100
+               7902 FORD            3000
+               7788 SCOTT           3000
+               7566 JONES           2975
+
+       30      7499 ALLEN           1600
+               7698 BLAKE           2850
+               7654 MARTIN          1250
+               7900 JAMES            950
+               7844 TURNER          1500
+               7521 WARD            1250
+
+
+14 rows selected.
+
+SQL>compute sum of sal on deptno
+SQL>select deptno,empno,ename,sal from emp order by deptno;
+
+   DEPTNO     EMPNO ENAME            SAL
+--------- --------- ---------- ---------
+       10      7782 CLARK           2450
+               7839 KING            5000
+               7934 MILLER          1300
+*********                      ---------
+sum                                 8750
+
+       20      7369 SMITH            800
+               7876 ADAMS           1100
+               7902 FORD            3000
+               7788 SCOTT           3000
+               7566 JONES           2975
+*********                      ---------
+sum                                10875
+
+       30      7499 ALLEN           1600
+               7698 BLAKE           2850
+               7654 MARTIN          1250
+               7900 JAMES            950
+               7844 TURNER          1500
+               7521 WARD            1250
+*********                      ---------
+sum                                 9400
+
+14 rows selected.
+==========
+For clearing computes and breaks
+	syntax:
+	CL{EAR} BREAKS
+	CL{EAR} COMPUTES
+
+
+SQL>cl computes
+computes cleared
+SQL>cl breaks
+breaks cleared
+
+==========
+SPOOL: used to spool up all the performances happened in sql working area into a file which is called as spooled file. this file basically gets an extension as .LST.
+	Syntax:
+	SPOOL filename OFF/OUT
+off: stops spooling into the file.
+out: stops and sends the file to the printer.
+ex:
+SQL>spool c:\nagam
+SQL>select deptno,ename,sal from emp order by deptno;
+SQL>select * from dept;
+SQL>spool off
+==========
+Subquery:
+	The select statement which has been written in the place of value in WHERE CLAUSE is called as SUBQUERY.
+ The statement execution will be happened from the right side to left of written parent select statement.
+First subquery will perform and taking that value the prior statement will be performed. 
+The subquery has to be specified with in braces.
+
+
+According to the returned values of subquery the type will be decided.
+if subquery returns only one row then it is called as SINGLE ROW subquery.
+if it returns mutiple rows, then it is called as MULTIPLE ROW subquery.
+if you are writing multiple row subquery, you got to preceed that statement with a SQL operator or SUBQUERY OPERATOR compulsory.
+
+Adv: without knowing the data of table you can prepare a select statement in this concept.
+
+SQL>select * from emp where sal=(select max(Sal) from emp);
+
+    EMPNO ENAME      JOB             MGR HIREDATE        SAL    
+--------- ---------- --------- --------- --------- --------- -
+     7839 KING       PRESIDENT           17-NOV-81      5000    
+
+SQL>select * from emp where sal=(select min(sal) from emp);
+
+    EMPNO ENAME      JOB             MGR HIREDATE        SAL    
+--------- ---------- --------- --------- --------- --------- -
+     7369 SMITH      CLERK          7902 17-DEC-80       800    
+
+SQL>select * from emp where sal>(select min(sal) from emp);
+
+
+For handling multiple rows or subquery which returns multiple rows we do have SQL OPERATORS.
+	syntax:
+	SELECT col_list FROM table_name 
+	WHERE col_name {RO} so(select statement)
+
+1)ANY : which handles multiple values i.e, rows specified or returned.
+	syntax:
+	col_name RO ANY(values_list or select statement)
+2)IN: like any but no need of RO.
+	syntax:
+	col_name IN(values_list or select statement)
+equalent to =ANY.
+
+SQL>select * from nagam where stdno in(1,3,9);
+
+    STDNO STDNAME                   STDADDRESS
+--------- ------------------------- --------------
+        3 Ramarao                   Tenali
+        1 Nagamani                  Guntur
+
+SQL>select * from nagam where stdno=any(1,3,9);
+
+    STDNO STDNAME                   STDADDRESS
+--------- ------------------------- --------------
+        3 Ramarao                   Tenali
+        1 Nagamani                  Guntur
+
+3) BETWEEN : in this operator you can specify range of values.
+	syntax:
+	WHERE col_name BETWEEN value1 AND value2
+SQL>select * from nagam where stdno between 2 and 5;
+
+    STDNO STDNAME                   STDADDRESS
+--------- ------------------------- ------------------
+        2 Giriprasad                Tenali
+        3 Ramarao                   Tenali
+        4 Sankar                    Guntur
+        5 Vamsi                     Hyderabad
+4) LIKE : applies only on  character columns.
+	syntax:
+	WHERE col_name LIKE 'value'
+in specifying value you can use two special characters.
+i)% : referes remaining length
+ii. _ : refers single character length.
+
+SQL>select * from emp where ename like 'S%';
+
+    EMPNO ENAME      JOB             MGR HIREDATE       
+--------- ---------- --------- --------- --------- --
+     7369 SMITH      CLERK          7902 17-DEC-80      
+     7788 SCOTT      ANALYST        7566 09-DEC-82      
+
+SQL>select * from emp where ename like '_A%';
+
+    EMPNO ENAME      JOB             MGR HIREDATE       
+--------- ---------- --------- --------- --------- --
+     7521 WARD       SALESMAN       7698 22-FEB-81      
+     7654 MARTIN     SALESMAN       7698 28-SEP-81      
+     7900 JAMES      CLERK          7698 03-DEC-81      
+
+SQL>select * from emp where ename like '%S%';
+
+    EMPNO ENAME      JOB             MGR HIREDATE       
+--------- ---------- --------- --------- --------- --
+     7369 SMITH      CLERK          7902 17-DEC-80      
+     7566 JONES      MANAGER        7839 02-APR-81      
+     7788 SCOTT      ANALYST        7566 09-DEC-82      
+     7876 ADAMS      CLERK          7788 12-JAN-83      
+     7900 JAMES      CLERK          7698 03-DEC-81      
+
+Joining:
+	By using this concept we can get data from more than one table. This joining willbe formed in between two table. 
+	for forming this joining both tables should contain same datatype. in where clause we have to frame a condition in which both common columns exist. According to this where clause condition the joining type is going to be decided. 
+we do have 5 types of joining.
+1) Cartesian or Cross joining:
+	in this joining we get data from more than one table but we won't specify any where clause.
+	syntax:
+	SELECT  * or col_list FROM table1,table2..................
+SQL> select * from x;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------
+        1 giri prasad               guntur
+        2 nagamani                  guntur
+        3 madhavi                   guntur
+        4 chaitanya                 guntur
+
+SQL> select * from y;
+
+    STDNO        M1        M2        M3
+--------- --------- --------- ---------
+        1        55        76        88
+        2        44        55        22
+        3        55        77        99
+        4        55        77        22
+        5        66        77        88
+
+SQL> select * from x,y;
+
+2)Equi joining: If we use joining operator as = in where clause then it is called as EQUI joining.
+	syntax:	WHERE table_name1.col_name=table2.col_name
+SQL>select * from x,y where x.sno=y.stdno;
+
+      SNO SNA                       SADDR                         STDNO
+--------- ------------------------- ------------------------- ---------
+       M1        M2        M3
+--------- --------- ---------
+        1 giri prasad               guntur                            1
+       55        76        88
+
+        2 nagamani                  guntur                            2
+       44        55        22
+
+        3 madhavi                   guntur                            3
+       55        77        99
+
+        4 chaitanya                 guntur                            4
+       55        77        22
+
+
+SQL> select x.sno,sna,saddr,m1,m2,m3 from x,y where x.sno=y.stdno;
+
+      SNO SNA                       SADDR                            M1
+--------- ------------------------- ------------------------- ---------
+       M2        M3
+--------- ---------
+        1 giri prasad               guntur                           55
+       76        88
+
+        2 nagamani                  guntur                           44
+       55        22
+
+        3 madhavi                   guntur                           55
+       77        99
+
+        4 chaitanya                 guntur                           55
+       77        22
+
+
+SQL> column saddr format a8
+SQL> column sna format a20
+SQL> r
+  1* select x.sno,sna,saddr,m1,m2,m3 from x,y where x.sno=y.stdno
+
+      SNO SNA                  SADDR           M1        M2        M3
+--------- -------------------- -------- --------- --------- ---------
+        1 giri prasad          guntur          55        76        88
+        2 nagamani             guntur          44        55        22
+        3 madhavi              guntur          55        77        99
+        4 chaitanya            guntur          55        77        22
+
+3) Non-equi joining: if we use joining operator other than = like <,> ...
+	syntax:
+	WHERE table1.col_name operator table2.col_name
+SQL> select x.sno,sna,saddr,m1,m2,m3 from x,y where x.sno>y.stdno;
+
+      SNO SNA                  SADDR           M1        M2        M3
+--------- -------------------- -------- --------- --------- ---------
+        2 nagamani             guntur          55        76        88
+        3 madhavi              guntur          55        76        88
+        4 chaitanya            guntur          55        76        88
+        3 madhavi              guntur          44        55        22
+        4 chaitanya            guntur          44        55        22
+        4 chaitanya            guntur          55        77        99
+4) Outer joining:
+	This one returns result according to the joining condition and after that this one returns the data which is not in final result from second table. From making a normal joining as outer joining put one + marks within braces before relational operator.
+
+	syntax:
+	WHERE table1.col_name (+)ro table2.col_name
+
+SQL> select x.sno,sna,saddr,m1,m2,m3 from x,y where x.sno(+)=y.stdno;
+
+      SNO SNA                  SADDR           M1        M2        M3
+--------- -------------------- -------- --------- --------- ---------
+        1 giri prasad          guntur          55        76        88
+        2 nagamani             guntur          44        55        22
+        3 madhavi              guntur          55        77        99
+        4 chaitanya            guntur          55        77        22
+	                                         66        77        88
+5) Self joining: Used to join a table to itself. Basically you can not frame a joining in a single table. but by taking alias concept we can treat a single table as two table and frame the joining condition.
+SQL> select * from emps;
+
+    EMPNO ENAME                         MGRNO       SAL
+--------- ------------------------- --------- ---------
+      100 nagamani                        300      9000
+      101 giridhar                        200      8000
+      200 santhi                                  12000
+      300 prasad                                  19000
+
+SQL> select a.ename,b.ename from emps a,emps b
+  2  where a.empno=b.mgrno;
+
+ENAME                     ENAME
+------------------------- -------------------------
+santhi                    giridhar
+prasad                    nagamani
+
+SQL> select a.ename "Superior",b.ename "Subordinate" from emps a,emps b
+  2  where a.empno=b.mgrno;
+
+superior                  subordinate
+------------------------- -------------------------
+santhi                    giridhar
+prasad                    nagamani
+=================================================
+
+*How to know how many words in a sentance 
+SQL> select length('Emirates Group IT Department') - length (replace('Emirates Group IT Department', ' ', '')) + 1 from dual;
+ 
+LENGTH('EMIRATESGROUPITDEPARTM
+------------------------------
+                             4
+=================================================
+
+*Convert numbers to words
+SQL> SELECT TO_CHAR( TO_DATE( 2014 , 'J' ) , 'JSP' ) FROM DUAL;
+ 
+TO_CHAR(TO_DATE(2014,'J'),'JSP
+------------------------------
+TWO THOUSAND FOURTEEN
+
+=================================================
+

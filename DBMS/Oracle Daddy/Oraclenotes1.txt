@@ -1,0 +1,850 @@
+Constraints: These are nothing but validations which are going to be defined for  columns. 
+Constraints have been classified in to 2 types.
+i. column constraints : When we define constraint information as a part of column information then it is called as Column constraint. 
+ii. table constraints ===> If we define constraint information in a seperate line, then it would be called as table constraint.
+note:
+in these two classifications constraints will be implemented on columns only.
+
+The available constraints are:
+1. NOT NULL
+2. UNIQUE
+3. PRIMARY KEY
+4. CHECK
+5. FOREIGN KEY or REFERENTIAL CONSTRAINT
+
+
+1)NOT NULL : Restricts NULL values.
+	column constraint:
+	syntax:	col_name datatype NOT NULL
+	table constraint:
+	we can not define NOT NULL as constraint in table constraint format.
+note : we can define any no. of NOT NULL constraints under a table.
+ex:
+SQL> create table giri_nn
+  2  (sno number not null,
+  3  sna varchar2(25));
+Table created.
+
+SQL> insert into giri_nn
+  2  values(1,'Giri');
+1 row created.
+
+SQL> insert into giri_nn
+  2  values(null,'Giri');
+insert into giri_nn
+            *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("SCOTT"."GIRI_NN"."SNO")
+
+2) UNQIUE: Restricts Duplicate rows.
+	
+	column constraint:
+	syntax:
+	col_name datatype {CONSTRAINT constraint_name} UNIQUE
+	table constraint:
+	syntax:
+	{CONSTRAINT constraint_name} UNIQUE(col_name1{,col2,col3....})
+note: you can specify any no. of unique constraints under a table. In table constraint if we implement unique constraint on multiple column then it would be called as CANDIDATE KEY.
+
+
+Ex for column constraint:
+
+SQL> create table giri_uq
+  2  (sno number unique,
+  3  sna varchar2(25));
+
+Table created.
+
+SQL> insert into giri_uq
+  2  values(1,'Giri');
+
+1 row created.
+
+SQL> insert into giri_uq
+  2  values(2,'Umalu');
+
+1 row created.
+
+SQL> insert into giri_uq
+  2  values(1,'Vamsi');
+insert into giri_uq
+            *
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SYS_C00762) violated
+
+
+SQL> drop table giri_uq;
+
+Table dropped.
+
+SQL> create table giri_uq
+  2  (sno number constraint giri unique,
+  3   sna varchar2(25));
+
+Table created.
+
+SQL>  insert into giri_uq
+  2   values(1,'Giri');
+
+1 row created.
+
+SQL> insert into giri_uq
+  2  values(2,'Umalu');
+
+1 row created.
+
+SQL> insert into giri_uq
+  2  values(1,'Vamsi');
+insert into giri_uq
+            *
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.GIRI) violated
+
+===Ex for table constraints:
+
+SQL> create table giri_uq
+  2  (sno number,
+  3  sna varchar2(25),
+  4  saddr varchar2(25),
+  5  constraint giri unique(sno));
+Table created.
+
+SQL> insert into giri_uq
+  2  values(1,'Giri','Guntur');
+1 row created.
+
+SQL> insert into giri_uq
+  2  values(1,'Vamsi','Tenali');
+insert into giri_uq
+            *
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.GIRI) violated
+
+
+SQL> drop table giri_uq;
+Table dropped.
+
+SQL> create table giri_uq
+  2  (sno number,
+  3  sna varchar2(25),
+  4  saddr varchar2(25),
+  5  constraint giri unique(sno,sna));
+Table created.
+
+SQL> insert into giri_uq
+  2  values(1,'Giri','Guntur');
+1 row created.
+
+SQL> insert into giri_uq
+  2  values(1,'Vamsi','Tenali');
+1 row created.
+
+SQL>  insert into giri_uq
+  2   values(1,'Giri','Tenali');
+ insert into giri_uq
+             *
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.GIRI) violated
+
+3) PRIMARY KEY:	Restrict both null and Duplicate values.
+	primary key= NOT NULL + UNIQUE
+
+	column constraint:
+	Syntax:
+	col_name datatype {CONSTRAINT constraint_name} PRIMARY KEY
+	table constraint:
+	Syntax:
+	{CONSTRAINT constraint_name} PRIMARY KEY(col1{,col2.....})
+note: under one table we can have only one primary key.
+If we implement PRIMARY KEY constraint on more than one column in table constraint format, then it would be called as COMPOSITE PRIMARY KEY.
+
+ex:
+SQL> create table giri_pk
+  2  (sno number constraint mypk primary key,
+  3  sna varchar2(25),
+ 4  saddr varchar2(25));
+Table created.
+
+SQL> insert into giri_pk
+  2  values(null,'Giri','Guntur');
+insert into giri_pk
+            *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("SCOTT"."GIRI_PK"."SNO")
+
+
+SQL> insert into giri_pk
+  2  values(1,'Vamsi','Guntur');
+1 row created.
+
+SQL> insert into giri_pk
+  2  values(1,'Giri','Guntur');
+insert into giri_pk
+            *
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.MYPK) violated
+
+=Applying primary key on multiple columns:
+
+SQL> create table giri_pk
+  2  (sno number,
+  3  sna varchar2(25),
+ 4  saddr varchar2(25),
+5  constraint mypk primary key(sno,sna));
+Table created.
+
+4) CHECK: this one implement our own validations on columns.
+	column constraint:
+	syntax:
+	col_name datatype {CONSTRAINT const_name} CHECK(condition)
+	note: you can specify the condition on the same column on which we have 		specified check constriant.
+	table constraint:
+	syntax:
+	{CONSTRAINT constraint_name} CHECK( condition1 LO condition2 .....)
+	in this you can specify conditions on multiple columns.
+
+
+ex column constraint:
+SQL> create table giri_chk
+  2  (sno number check(sno>100),
+  3  sna varchar2(25));
+Table created.
+
+SQL> insert into giri_chk
+  2  values(1,'Giri');
+insert into giri_chk
+    *
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.SYS_C00767) violated
+
+==Ex for table constraint:
+SQL> create table giri_chk1
+  2  (sno number,
+  3  sna varchar2(25),
+  4  saddr varchar2(25),
+  5  constraint mychk1 check(sno>100 or saddr='Guntur'));
+Table created.
+
+SQL> insert into giri_chk1
+  2  values(101,'Giri','Tenali');
+1 row created.
+
+SQL> insert into giri_chk1
+  2  values(90,'Venkat','Guntur');
+1 row created.
+
+SQL> insert into giri_chk1
+  2  values(1,'Venki','Tenali');
+insert into giri_chk1
+                 *
+ERROR at line 1:
+ORA-02290: check constraint (SCOTT.MYCHK1) violated
+
+5) Foreign key:
+Referential Constraint:
+Integrity Constraint:
+
+	This is a constraint which is used to put reference to a column which does have primary key or unique Constriant available in another table. for putting this reference, first up all both columns should contain same datatype and the column to which we are putting reference must contain primary key or unique constraint. 
+	this relationship is called as parent-child relation ship. The table which does have the primary key constrained column is called as parent table and from which we have put a reference is called as child table. 
+
+due to this, child table will accept the same data what parent table contains. The record available in child table is called as depenedent record of a record available in parent table. Without removing dependent record we can not remove parent record. We cann't drop parent table without removing relation or child table.
+
+	Column Constraint:
+	syntax:
+	col_name datatype {CONSTRAINT constraint_name}
+	REFERENCES parent_table_name{(col_name)} {ON 	DELETE CASCADE}
+	Table Constraint:
+	syntax:
+	{CONSTRAINT constraint_name} 
+	FOREIGN KEY(child_col_name) REFERENCES 		parent_Table_name{(col_name)} {ON DELETE 	CASCADE}
+
+Column is optional when you are refering a column which does have primary key constraint. If it is an unique constrained column then this one is compulsary.
+
+ex:
+SQL> create table parent_prs
+  2  (sno number(5) primary key,
+  3  stdname varchar2(25),
+  4  stdaddress varchar2(25))
+  5  ;
+
+Table created.
+
+SQL> create table child_prs
+  2  (stdno number(5) constraint malathi references parent_prs(sno),
+  3  m1 number,m2 number,m3 number);
+
+Table created.
+
+SQL> select * from parent_prs;
+
+      SNO STDNAME                   STDADDRESS
+--------- ------------------------- -------------------------
+        1 Vamsi                     Guntur
+        2 Chandu                    Tirupati
+        3 Hari                      Hyderabad
+        4 Chandra                   Tenali
+
+SQL> insert into child_prs
+  2  values(1,90,90,77);
+
+1 row created.
+
+SQL> insert into child_prs
+  2  values(5,77,66,55);
+insert into child_prs
+            *
+ERROR at line 1:
+ORA-02291: integrity constraint (SCOTT.MALATHI) violated - parent key not found
+
+
+SQL> delete from parent_prs where sno=1;
+delete from parent_prs where sno=1
+            *
+ERROR at line 1:
+ORA-02292: integrity constraint (SCOTT.MALATHI) violated - child record found
+
+
+SQL> drop table parent_prs;
+drop table parent_prs
+           *
+ERROR at line 1:
+ORA-02449: unique/primary keys in table referenced by foreign keys
+
+
+We do have a system table in whcih system maintains information regarding all constraints availble. that is USER_CONSTRAINTS.
+
+EX:
+SQL> DESC USER_CONSTRAINTS
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ OWNER                           NOT NULL VARCHAR2(30)
+ CONSTRAINT_NAME                 NOT NULL VARCHAR2(30)
+ CONSTRAINT_TYPE                          VARCHAR2(1)
+ TABLE_NAME                      NOT NULL VARCHAR2(30)
+ SEARCH_CONDITION                         LONG
+ R_OWNER                                  VARCHAR2(30)
+ R_CONSTRAINT_NAME                        VARCHAR2(30)
+ DELETE_RULE                              VARCHAR2(9)
+ STATUS                                   VARCHAR2(8)
+ DEFERRABLE                               VARCHAR2(14)
+ DEFERRED                                 VARCHAR2(9)
+ VALIDATED                                VARCHAR2(13)
+ GENERATED                                VARCHAR2(14)
+ BAD                                      VARCHAR2(3)
+ LAST_CHANGE                              DATE
+
+SQL> SELECT * FROM USER_CONSTRAINTS WHERE TABLE_NAME='CHILD_PRS';
+
+OWNER                          CONSTRAINT_NAME                C TABLE_NAME
+------------------------------ ------------------------------ - -----------------
+SEARCH_CONDITION
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS   
+------------------------------ ------------------------------ --------- -------- 
+DEFERRED  VALIDATED     GENERATED      BAD LAST_CHAN
+--------- ------------- -------------- --- ---------
+SCOTT                          MALATHI                        R CHILD_PRS
+
+SCOTT                          SYS_C00769                     NO ACTION ENABLED  
+IMMEDIATE VALIDATED     USER NAME          18-APR-04
+
+
+SQL> SELECT * FROM USER_CONSTRAINTS WHERE CONSTRAINT_NAME='SYS_C00769';
+
+OWNER                          CONSTRAINT_NAME                C TABLE_NAME
+------------------------------ ------------------------------ - -----------------
+SEARCH_CONDITION
+--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS   
+------------------------------ ------------------------------ --------- -------- 
+DEFERRED  VALIDATED     GENERATED      BAD LAST_CHAN
+--------- ------------- -------------- --- ---------
+SCOTT                          SYS_C00769                     P PARENT_PRS
+
+                                                                        ENABLED  
+IMMEDIATE VALIDATED     GENERATED NAME     18-APR-04
+
+
+SQL> 
+
+Ex for table constraint:
+
+SQL> create table parent_prs
+  2  (sno number(5) primary key,
+  3  stdname varchar2(25),
+  4  stdaddress varchar2(25))
+  5  ;
+
+Table created.
+
+SQL> create table child_prs
+  2  (stdno number(5),
+  3  m1 number,m2 number,m3 number,
+ constraint myfk foreign key(stdno) references parent_prs(sno));
+
+Table created.
+
+ON DELETE CASCADE: because of this option, whenever we remove a record from the parent table, foreign key automatically removes the dependent record of that record from the child table.
+
+ex:
+SQL> create table parent_prs
+  2  (sno number primary key,
+  3  sna varchar2(25),
+  4  stdaddress varchar2(25));
+
+Table created.
+
+SQL> create table child_prs
+  2  (sno number constraint malathi references parent_prs on delete cascade,
+  3  m1 number,m2 number,m3 number);
+
+Table created.
+
+SQL> create table child_prs1
+  2  (stdno number constraint malathi1 references parent_prs on delete cascade,
+  3  arear_amount number,
+  4  paid_date date);
+
+Table created.
+
+SQL> select * from parent_prs;
+
+      SNO SNA                       STDADDRESS
+--------- ------------------------- ----------------------
+        1 Malathi                   Guntur
+        2 Giri                      Guntur
+
+SQL> select * from child_prs;
+
+      SNO        M1        M2        M3
+--------- --------- --------- ---------
+        1        77        99        77
+        2        99        77        66
+
+SQL> select * from child_prs1;
+
+    STDNO AREAR_AMOUNT PAID_DATE
+--------- ------------ ---------
+        1         2000 18-APR-04
+        2         8000 18-APR-04
+
+SQL> delete from parent_prs where sno=1;
+
+1 row deleted.
+
+SQL> select * from parent_prs;
+
+      SNO SNA                       STDADDRESS
+--------- ------------------------- ----------------------
+        2 Giri                      Guntur
+
+
+SQL> select * from child_prs;
+
+      SNO        M1        M2        M3
+--------- --------- --------- ---------
+        2        99        77        66
+
+SQL> select * from child_prs1;
+
+    STDNO AREAR_AMOUNT PAID_DATE
+--------- ------------ ---------
+        2         8000 18-APR-04
+
+
+For droping prent table by remove relation,
+We have to remove foreign key constraints from the child table.
+otherwise use CASCADE CONSTRAINTS option in DROP TABLE command when you are implementing this command on Parent table.
+
+ex:
+SQL> drop table parent_prs cascade constraints;
+Table dropped.
+===================================================
+ALTER TABLE:
+	used to redefine a table.
+When we are using this command we have to choose an option available under this command. there are 5 options under this command. they are
+1. ADD
+2. MODIFY
+3. DROP
+4. ENABLE
+5. DISABLE
+
+1)ADD:  
+	Used to add new columns and constraints to existed columns.
+	syntax:
+	ALTER TABLE table_name
+	ADD(col_name datatype {constraint_information}, 	col_name datatype,{table constraint})
+
+ex:
+SQL> desc stdinfo
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ STDNO                                    NUMBER(3)
+ STDNAME                                  VARCHAR2(25)
+ STDADDRESS                               VARCHAR2(25)
+ GENDER                                   CHAR(1)
+ QUALIFICATION                            VARCHAR2(25)
+
+SQL>  alter table stdinfo
+  2  add(fname varchar2(15));
+
+Table altered.
+
+SQL> desc stdinfo
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ STDNO                                    NUMBER(3)
+ STDNAME                                  VARCHAR2(25)
+ STDADDRESS                               VARCHAR2(25)
+ GENDER                                   CHAR(1)
+ QUALIFICATION                            VARCHAR2(25)
+ FNAME                                    VARCHAR2(15)
+
+SQL> select * from stdinfo;
+
+no rows selected
+
+SQL> alter table stdinfo
+  2  add(constraint nagamani primary key(stdno));
+
+Table altered.
+
+EX 2:
+SQL> create table x
+  2  (Sno number);
+
+Table created.
+
+SQL> desc x
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      NUMBER
+
+SQL> alter table x
+  2  add(sname varchar2(10),address varchar2(25) not null,
+  3  unique(sno));
+
+Table altered.
+
+SQL> desc x
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      NUMBER
+ SNAME                                    VARCHAR2(10)
+ ADDRESS                         NOT NULL VARCHAR2(25)
+
+SQL> select * from user_constraints where table_name='X';
+
+OWNER           CONSTRAINT_NAME       C    TABLE_NAME   SEARCH_CONDITION--------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS
+------------------------------ ------------------------------ --------- --------
+SCOTT                          SYS_C00425                     C X
+ADDR IS NOT NULL
+                                                                        ENABLED
+
+SCOTT                          SYS_C00426                     U X
+
+                                                                        ENABLED
+
+
+2) MODIFY:
+	used to
+	i) redefine the datatype
+	ii) make NULL column as NOT NULL column and viceversa
+	iii) redefine DEFAULT value of a column.
+
+i) redefine the datatype:
+	syntax:
+	ALTER TABLE table_name
+	MODIFY(col_name new_data_type)
+if table contains data you can not 
+i)change the whole datatype 
+ii)reduce length of column
+ex:
+SQL> desc x
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      NUMBER
+ SNAME                                    VARCHAR2(10)
+ ADDRESS                         NOT NULL VARCHAR2(25)
+
+SQL> alter table x
+  2  modify(sname varchar2(25));
+Table altered.
+
+SQL> desc x
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      NUMBER
+ SNAME                                    VARCHAR2(25)
+ ADDRESS                         NOT NULL VARCHAR2(25)
+
+SQL> alter table x
+  2  modify(sno varchar2(10));
+
+Table altered.
+
+SQL> desc x
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      VARCHAR2(10)
+ SNAME                                    VARCHAR2(25)
+ ADDRESS                         NOT NULL VARCHAR2(25)
+
+ii) make NULL column as NOT NULL column and 		viceversa
+	syntax:
+	making NULL==>NOT NULL
+	ALTER TABLE table_name
+	MODIFY(col_name NOT NULL)
+	
+	making NOT NULL==>NULL
+	ALTER TABLE table_name
+	MODIFY(col_name NULL)
+
+NOTE: during convertion of NULL column as NOT NULL column, before implement NOT NULL constraint, system checks whether the column data violates NOT NULL constraint or not. if so, constraint is not going to be implemented.
+
+SQL> desc x
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      VARCHAR2(10)
+ SNAME                                    VARCHAR2(25)
+ ADDRESS                         NOT NULL VARCHAR2(25)
+
+SQL> ALTER TABLE X
+  2  MODIFY(SNAME NOT NULL);
+
+Table altered.
+
+SQL> DESC X
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      VARCHAR2(10)
+ SNAME                           NOT NULL VARCHAR2(25)
+ ADDRESS                         NOT NULL VARCHAR2(25)
+
+SQL> ALTER TABLE X
+  2  MODIFY(SNAME NULL);
+
+Table altered.
+
+SQL> DESC X
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      VARCHAR2(10)
+ SNAME                                    VARCHAR2(25)
+ ADDRESS                         NOT NULL VARCHAR2(25)
+
+
+iii) redefine DEFAULT value of a column.
+	syntax:
+	ALTER TABLE table_name
+	MODIFY(col_name DEFAULT value)
+
+ex:
+SQL> create table x
+  2  (sno number,sna varchar2(25),saddr varchar2(25));
+
+Table created.
+
+SQL> insert into x(sno,sna)
+  2  values(1,'Giri');
+
+1 row created.
+
+SQL> select * from x;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Giri
+
+SQL> alter table x
+  2  modify(saddr default 'Guntur');
+
+Table altered.
+
+SQL> insert into x
+  2  (sno,sna)
+  3  values(2,'Nagamani');
+
+1 row created.
+
+SQL> select * from x;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Giri
+        2 Nagamani                  Guntur
+
+SQL> alter table x
+  2  modify(saddr default 'Tenali');
+
+Table altered.
+
+SQL> insert into x(sno,sna)
+  2  values(3,'Venumadhavi');
+
+1 row created.
+
+SQL> select * from x;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Giri
+        2 Nagamani                  Guntur
+        3 Venumadhavi               Tenali
+
+SQL> alter table x
+  2  modify(saddr default NULL);
+
+Table altered.
+
+SQL> insert into x(sno,sna)
+  2  values(4,'Saradhi');
+
+1 row created.
+
+SQL> select * from x;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Giri
+        2 Nagamani                  Guntur
+        3 Venumadhavi               Tenali
+        4 Saradhi
+
+3. drop :	used to drop cosntraints and columns.
+	syntax:
+	ALTER TABLE table_name
+	DROP CONSTRAINT constr_name
+
+	for removing UNIQUE and PRIMARY key, you need not to know about the constraint name.
+	syntax for UNIQUE:
+	ALTER TABLE table_name
+	DROP UNIQUE(col_name)
+
+	syntax for PRIMARY KEY:
+	ALTER TABLE table_name
+	DROP PRIMARY KEY
+
+	
+	column droping has been introduced in oracle8i. in this we can drop a single column in an execution of drop option. if you want to remove mutiple columns you need to execute the same command no. of times. from oracle9i in a single execution of this command, you can drop multiple columns in a single execution of ALTER TABLE command.
+	oracle 8i:
+	syntax:
+	ALTER TABLE table_name
+	DROP COLUMN col_name
+
+	oracle 9i
+	syntax:
+	ALTER TABLE table_name
+	DROP(col1,col2,col3.....................)
+
+
+4) DISABLE: used to disable action of a constriant.
+	syntax:
+	ALTER TABLE table_name
+	DISABLE CONSTRAINT constraint_name
+
+5) ENABLE : used to enable a disabled constraint. that is geting a constraint in to action.
+	syntax:
+	ALTER TABLE table_name
+	ENABLE CONSTRAINT constraint_name
+when we try to enable the constraint, system checks the data whether it violates the nature of constraint or not. if not, constraint is going to be enabled else returns corresponding error message.
+
+
+SQL> create table giri
+  2  (stdno number unique,
+  3  stdname varchar2(25),
+  4  stdaddress varchar2(25));
+
+Table created.
+
+SQL> insert into giri
+  2  values(1,'Giri','Guntur');
+
+1 row created.
+
+SQL> insert into giri
+  2  values(1,'Sarraju','Tirupati');
+insert into giri
+            *
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SYS_C00699) violated
+
+
+SQL> select * from user_Constraints where table_name='GIRI';
+
+OWNER                          CONSTRAINT_NAME                C TABLE_NAME
+------------------------------ ------------------------------ - --------------
+SEARCH_CONDITION
+------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS
+------------------------------ ------------------------------ --------- ------
+DEFERRED  VALIDATED     GENERATED      BAD LAST_CHAN
+--------- ------------- -------------- --- ---------
+SCOTT                          SYS_C00699                     U GIRI
+
+                                                                        ENABLE
+IMMEDIATE VALIDATED     GENERATED NAME     22-APR-04
+
+
+SQL> alter table giri
+  2  disable constraint sys_c00699;
+
+Table altered.
+
+SQL> select * from user_Constraints where table_name='GIRI';
+
+OWNER                          CONSTRAINT_NAME                C TABLE_NAME
+------------------------------ ------------------------------ - --------------
+SEARCH_CONDITION
+------------------------------------------------------------------------------
+R_OWNER                        R_CONSTRAINT_NAME              DELETE_RU STATUS
+------------------------------ ------------------------------ --------- ------
+DEFERRED  VALIDATED     GENERATED      BAD LAST_CHAN
+--------- ------------- -------------- --- ---------
+SCOTT                          SYS_C00699                     U GIRI
+
+                                                                        DISABL
+IMMEDIATE NOT VALIDATED GENERATED NAME     22-APR-04
+
+
+SQL> insert into giri
+  2  values(1,'Sarraju','Tirupati');
+
+1 row created.
+
+SQL> alter table giri
+  2  enable constraint sys_c00699;
+alter table giri
+*
+ERROR at line 1:
+ORA-02299: cannot enable (SCOTT.SYS_C00699) - duplicate keys found
+
+
+SQL> alter table giri
+  2  drop constraint sys_c00699;
+
+Table altered.
+
+SQL> alter table giri
+  2  add(unique(stdno));
+alter table giri
+*
+ERROR at line 1:
+ORA-02299: cannot enable (SCOTT.SYS_C00700) - duplicate keys found
+
+
+SQL> delete from giri where stdname='Sarraju';
+
+1 row deleted.
+
+SQL> alter table giri
+  2  add(unique(stdno));
+
+Table altered.
+
+SQL> alter table giri
+  2  drop unique(Stdno);
+
+Table altered.
+

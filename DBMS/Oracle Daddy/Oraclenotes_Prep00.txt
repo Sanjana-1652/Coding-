@@ -1,0 +1,923 @@
+Oracle:
+we can perfrom 3 toos under oracle.
+1. SQL
+2. SQL PLUS => these are commands. 
+3. PL/SQL :   ==> programming.
+all these 3 things will be performed in a working area which is called as SQL WORKING AREA.
+
+SQL: Structured Query Language.
+PL/SQL: procedural langauge with Structured query language.
+SQLPLUS: these are the supporting command for SQL commands and screen oriented commands.
+
+
+
+when you are hooking up with SQL working area,system asks you to given the username,password and host string.
+When we install Oracle software, we are going to get 2 users commonly.
+1. SCOTT		2. SYSTEM
+pwd: TIGER	pwd: MANAGER
+
+
+
+Differences between SQL and SQLPLUS commands:
+1.can be types in mulitple lines.
+1. doesn't allow you to type in multiple lines.
+2. should be terminated with a command terminator that is ;.
+2. no need of ;.
+3. The text belongs to SQL command is going to be stored in BUFFER.
+3. the text belongs to SQLPLUS commnds will not be stored in BUFFER.
+
+
+
+Clear Screen: used to clear the screen.
+	syntax:
+	CL{EAR} SCR{EEN}
+
+Create Table: used to create a table in the current working user.
+	syntax:
+	CREATE TABLE table_name
+	(col_name datatype,
+	col_name datatype,
+ 	col_name datatype,
+	..................................,
+	col_name datatype)
+
+Rules for giving a name as table or column name:
+1. First letter must be an alphabet.
+2. should not exceed 30 characters.
+3. should be a single word.
+4. allows only 3 special symbols $,#,_
+5. give the names in descripting manner.
+6. under one user you can not prepare more than one table with the same name.
+7. under one table you can not have more than one column with the same name.
+8. names should not be a datatype,function,keywords and Reserved word.
+
+
+Datatypes:
+
+numaric:
+
+1. NUMBER :
+	used to accept both round and float numbers.
+	syntax:
+	col_name NUMBER{(p{,s})}
+p: precision  that means length of column.
+s : scale  here you have to specify how many position you want keep after the decimal point in total length.
+
+sal
+9000
+10000	sal number(5)
+4567
+19000
+
+grade
+1.5678
+2.456	grade number(7,4)
+23.4567
+876.5674
+100
+
+note: max length of number datatype is 38 digits. if you do not specify any precison system default allots max length to that column.
+
+2. Integer : allows entries which does have max. length of 38.
+	syntax:
+	col_name INTEGER
+3. Decimal : Accepts only round numbers.
+	syntax:
+	col_name DECIMAL(p)
+
+
+String datatypes:
+	These datatypes will accept alphabet,alphanumaric, alphanumaric and symbolic values.
+
+1. Char: this is also called Fixed Length Character. max. length upto 2000 character length.
+	syntax:
+	col_name CHAR{(p)}
+if you do not specify precision for this datatype, system allots only single character length.
+2. VARCHAR2: this is called as Variable length character. Max. length will be upto 4000 character length.
+	syntax:
+	col_name VARCHAR2(p)
+
+sna  char(25)		sna varchar2(25)
+Hari			Hari
+25			4
+3. Long : more than 4000 characters length. upto 2gb. this is also variable type.
+	syntax:	col_name LONG
+note: one table can have only one long column.
+
+Binary Large Objects :
+		Allots blobs that is photographs,sound etc.,.
+i) Raw : allows upto 255 bytes.
+	syntax:
+	col_name RAW
+ii) Long Raw : allows upto 2 gb.
+	syntax:
+	col_name LONG RAW
+note: one table can have only one LONG RAW column.
+
+
+Date: allows both date and time
+	syntax:
+	col_name DATE
+The data which you want to supply to Date datatype column should contain DD-MON-YY or DD-MON-YYYY format.
+12-Oct-04 	           12-oct-1904
+
+11/04/04	
+
+=====================================================
+Creation of table:
+
+SQL> create table student_Details
+  2  (sno decimal(3),
+  3  sna varchar2(25),
+  4  saddr varchar2(25))
+  5  ;
+
+Table created.
+======================================================
+Describe : used to show the structure of a table.
+	syntax:
+	DESC{RIBE} table_name
+ex:
+SQL> desc student_Details
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ SNO                                      NUMBER(3)
+ SNA                                      VARCHAR2(25)
+ SADDR                                    VARCHAR2(25)
+=======================================================
+INSERT :
+ 	used to insert rows in a table. in a single execution of this command you can insert only one row.
+	syntax:
+	INSERT INTO table_name{(col_list)}
+	VALUES(values_list)
+ex:
+SQL> insert into student_details
+  2  values(1,'Hari','Guntur');
+1 row created.
+
+SQL> insert into student_details(sno,sna)
+  2  values(2,'Prasad');
+1 row created.
+
+SQL> insert into student_details
+  2  values(3,null,'Tenali');
+1 row created.
+
+Note:
+Null is a reservered word which returns or refers a SPACE.
+=======================================================
+Select:
+	USEd to show the data of a table.This is also called as Query. Query means retrieving data from a table.
+	syntax:
+	SELECT {distinct} * or col_list FROM table_name
+	{where clause}
+* : shows all columns
+col_list: shows only specified columns inthe column list.
+distinct: this thing has to be specified in combination of * or col_list. This one shows distinct rows of the specified col_list or all columns.
+ex:
+SQL> select * from student_details;
+
+      SNO SNA                       SADDR
+--------- ------------------------- --------------
+        1 Hari                      Guntur
+        2 Prasad
+        3                           Tenali
+        5 giridhar                  Guntur
+        6 naveen                    chenaii
+
+SQL> select sno,sna from student_details;
+
+SQL> select distinct * from student_Details;
+
+      SNO SNA                       SADDR
+--------- ------------------------- --------------
+        1 Hari                      Guntur
+        2 Prasad
+        3                           Tenali
+        5 giridhar                  Guntur
+        6 naveen                    chenaii
+
+SQL> select distinct saddr from student_details;
+
+SADDR
+-------------------------
+Guntur
+Tenali
+chenaii
+
+
+
+Where cluase:  This is total meant for giving a validation regarding data. 
+syntax:	
+	WHERE col_name RO value
+Ro: =,<,<=,>,>=,!=
+
+ex:
+SQL> select * from student_Details where sno=2;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        2 Prasad
+
+SQL> select * from student_Details where saddr='Guntur';
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Hari                      Guntur
+        5 giridhar                  Guntur
+
+SQL> select * from student_Details where saddr='guntur';
+
+no rows selected
+
+SQL> select * from student_details where lower(saddr)='guntur';
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Hari                      Guntur
+        5 giridhar                  Guntur
+
+SQL> select * from student_Details where saddr=null;
+
+no rows selected
+
+SQL> select * from student_Details where saddr is null;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        2 Prasad
+
+====
+Using of Arthimatical operators in Select statement:
+
+Arthimatical operators:+,-,*,/
+
+ex:
+SQL> select * from nagam_child;
+
+    STDNO        M1        M2        M3
+--------- --------- --------- ---------
+        1        99        88        66
+        7        55        44        22
+
+SQL> select m1+3 from nagam_child;
+
+     M1+3
+---------
+      102
+       58
+
+SQL> select stdno,m1,m2,m3,m1+m2+m3,(m1+m2+m3)/3 from nagam_Child;
+
+    STDNO        M1        M2        M3  M1+M2+M3 (M1+M2+M3)/3
+--------- --------- --------- --------- --------- ------------
+        1        99        88        66       253    84.333333
+        7        55        44        22       121    40.333333
+
+Alias concept:
+	by using this concept we can show a new name in the place of column names. This is total meant for dispaly. this is not changing the column name permenently.
+To define an alias name, given the alias name by leaving a space after the column name in select statement. if alias name is in multiple words , specify that alias name within double quotes.
+	syntax:	col_name "alias name"
+SQL> select stdno,m1 Physics,m2 Chemistry,m3 Maths,m1+m2+m3 Total,
+  2  (m1+m2+m3)/3 "Avg Marks" from nagam_child;
+
+    STDNO   PHYSICS CHEMISTRY     MATHS     TOTAL Avg Marks
+--------- --------- --------- --------- --------- ---------
+        1        99        88        66       253 84.333333
+        7        55        44        22       121 40.333333
+
+SQL> select * from nagam_child where (m1+m2+m3)>200;
+
+    STDNO        M1        M2        M3
+--------- --------- --------- ---------
+        1        99        88        66
+
+Using logical operators:
+we do have 3 logical operators.
+1. and : when we are trying to check more than one condition in where clause we have to use this operator. if you want to have those rows which satisfy all condition, then you have to join all those conditions with AND operator.
+	syntax:	Where condition1 AND condition2 AND condition3 ................
+
+2. or : this one returns rows which satisfy atleast one condition.
+	syntax:	WHERE condition1 OR condition2 OR condition3 ..............
+3. not: this one checks the data in viceversa of condition.
+	syntax:	WHERE NOT(col_name) RO value
+
+SQL> SELECT * FROM NAGAM_PARENT
+  2  WHERE sno>4 and saddr='Hyderabad';
+
+      SNO SNA                       SADDR
+--------- ------------------------- --------------------
+        5 Barathi                   Hyderabad
+
+SQL> select * from nagam_parent
+  2  where sno>4 or saddr='Hyderabad';
+
+      SNO SNA                       SADDR
+--------- ------------------------- --------------------
+        3 Chandra                   Hyderabad
+        4 Santhi                    Hyderabad
+        5 Barathi                   Hyderabad
+        6 Jayanthi                  Pune
+        7 Aparna                    Delhi
+        8 Chandu                    Bangalore
+
+6 rows selected.
+
+SQL> select * from nagam_parent
+  2  where not(sno)=1;
+
+      SNO SNA                       SADDR
+--------- ------------------------- --------------------
+        2 Venu Madhavi              Tenlai
+        3 Chandra                   Hyderabad
+        4 Santhi                    Hyderabad
+        5 Barathi                   Hyderabad
+        6 Jayanthi                  Pune
+        7 Aparna                    Delhi
+        8 Chandu                    Bangalore
+
+7 rows selected.
+==
+We do have 2 system tables which shows information regarding 4 types of database objects.
+1. TAB: tables,views,synonyms and clusters
+2. CAT: tables,views,synonyms and sequences.
+ex:
+SQL> select * from tab;
+SQL> select * from cat;
+
+=====================================================================
+delete :
+	used to remove records from the table.
+	syntax:
+	DELETE FROM table_name
+	{where clause}
+ex:
+SQL> delete from student_details where sno=6;
+1 row deleted.
+
+SQL> delete from student_details where saddr is null;
+1 row deleted.
+
+SQL> select * from student_details;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Hari                      Guntur
+        3                           Tenali
+        5 giridhar                  Guntur
+
+SQL> delete from student_details;
+3 rows deleted.
+
+SQL> select * from student_Details;
+no rows selected
+==================================================================
+update : 
+	used to modify the data of a table.
+	syntax:
+	UPDATE table_name SET col_name=new_value {where clause}
+ex:
+SQL> select * from student_Details;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Hari                      Guntur
+        2 Prasad
+        3                           Tenali
+        5 giridhar                  Guntur
+        6 naveen                    chenaii
+
+SQL> update student_Details set saddr='Tirupati' where saddr is null;
+
+1 row updated.
+
+SQL> select * from student_Details;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Hari                      Guntur
+        2 Prasad                    Tirupati
+        3                           Tenali
+        5 giridhar                  Guntur
+        6 naveen                    chenaii
+
+SQL> update student_details set saddr='Tirupati';
+
+5 rows updated.
+
+SQL> select * from student_Details;
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+        5 giridhar                  Tirupati
+        6 naveen                    Tirupati
+====================================================================
+Selct,Delete,Insert,Update : these commands are called DATA MANIPULATION LANGUAGE COMMANDS(DML commands)
+SELECT is also called as DATA QUERY LANGUAGE COMMAND.
+====================================================================
+Commit: 
+	This command is used to make temperorty transactin permenent to the database. Temperory transactions means the transactions done by DML commands from the starting of SQL or from the last COMMIT statement.
+	syntax:
+	COMMIT;
+
+Rollback:
+	This command cancels all temperory transactions which are implemented from the last commit statement or right from the begining of sql.
+	syntax:
+	ROLLBACK;
+
+Savepoint:  The purpose of rollback is totally meant for rollback purpose. These are nothing but terminals in between temperory transactions.
+	syntax:
+	SAVEPOINT savepoint_name;
+how to rollback upto a savepoint:
+	syntax:
+	ROLLBACK TO SAVEPOINT savepoint_name;
+
+Commit,Rollback and Savepoint commands are called Transaction Control Language commandS(TCL commands)
+
+ex:
+SQL> select * from student_details;
+
+      SNO SNA                       SADDR                     
+--------- ------------------------- ------------------------- 
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+        5 giridhar                  Tirupati
+        6 naveen                    Tirupati
+        7 Devi                      Tenali
+        8 Radhika                   Guntur
+
+7 rows selected.
+
+SQL> savepoint x;
+
+Savepoint created.
+
+SQL> delete from student_details where sno>=5;
+
+4 rows deleted.
+
+SQL> select * from student_Details;
+
+      SNO SNA                       SADDR                     
+--------- ------------------------- ------------------------- 
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+
+SQL> savepoint y;
+Savepoint created.
+
+SQL> delete from emp;
+14 rows deleted.
+
+SQL> delete from dept;
+4 rows deleted.
+
+SQL> savepoint c;
+Savepoint created.
+
+SQL> insert into dept
+  2  values(1,'Accounting','Guntur');
+
+1 row created.
+
+SQL> select * from dept;
+   DEPTNO DNAME          LOC
+--------- -------------- -------------
+        1 Accounting     Guntur
+
+SQL> rollback to savepoint y;
+Rollback complete.
+
+SQL> select * from dept;
+   DEPTNO DNAME          LOC
+--------- -------------- -------------
+       10 ACCOUNTING     NEW YORK
+       20 RESEARCH       DALLAS
+       30 SALES          CHICAGO
+       40 OPERATIONS     BOSTON
+
+SQL> select * from emp;
+
+    EMPNO ENAME      JOB             MGR HIREDATE        SAL    
+--------- ---------- --------- --------- --------- --------- -
+     7369 SMITH      CLERK          7902 17-DEC-80       800    
+     7499 ALLEN      SALESMAN       7698 20-FEB-81      1600    
+     7521 WARD       SALESMAN       7698 22-FEB-81      1250    
+     7566 JONES      MANAGER        7839 02-APR-81      2975    
+     7654 MARTIN     SALESMAN       7698 28-SEP-81      1250    
+     7698 BLAKE      MANAGER        7839 01-MAY-81      2850    
+     7782 CLARK      MANAGER        7839 09-JUN-81      2450    
+     7788 SCOTT      ANALYST        7566 09-DEC-82      3000    
+     7839 KING       PRESIDENT           17-NOV-81      5000    
+     7844 TURNER     SALESMAN       7698 08-SEP-81      1500    
+     7876 ADAMS      CLERK          7788 12-JAN-83      1100    
+     7900 JAMES      CLERK          7698 03-DEC-81       950    
+     7902 FORD       ANALYST        7566 03-DEC-81      3000    
+     7934 MILLER     CLERK          7782 23-JAN-82      1300    
+
+14 rows selected.
+
+SQL> select * from student_details;
+
+      SNO SNA                       SADDR                     
+--------- ------------------------- ------------------------- 
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+
+SQL> rollback to savepoint x;
+
+Rollback complete.
+
+SQL> select * from student_details;
+
+      SNO SNA                       SADDR                     
+--------- ------------------------- ------------------------- 
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+        5 giridhar                  Tirupati
+        6 naveen                    Tirupati
+        7 Devi                      Tenali
+        8 Radhika                   Guntur
+
+7 rows selected.
+=====================================================================
+Rename : used to rename an existed object.
+	syntax:
+	RENAME old_name TO new_name
+ex:
+SQL> select * from student_Details;
+
+      SNO SNA                       SADDR                     QU
+--------- ------------------------- ------------------------- --
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+        5 giridhar                  Tirupati
+        6 naveen                    Tirupati
+        7 Devi                      Tenali
+        8 Radhika                   Guntur
+
+7 rows selected.
+
+SQL> rename student_details to sd;
+
+Table renamed.
+
+SQL> select * from student_details;
+select * from student_details
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> select * from sd;
+
+      SNO SNA                       SADDR                     QU
+--------- ------------------------- ------------------------- --
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+        5 giridhar                  Tirupati
+        6 naveen                    Tirupati
+        7 Devi                      Tenali
+        8 Radhika                   Guntur
+
+7 rows selected.
+=====================================================================
+Synonym: used to give a permenent alias name for the table. simply saying this is like a pet name for the table.
+	syntax:
+	CREATE SYNONYM synonym_name
+	FOR table_name
+instead of refering original table name, you can use synonym in all transactions.
+
+ex:
+SQL> select * from student_Details;
+
+      SNO SNA                       SADDR               
+--------- ------------------------- --------------------
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+        5 giridhar                  Tirupati
+        6 naveen                    Tirupati
+        7 Devi                      Tenali
+        8 Radhika                   Guntur
+       11 Jahnavi                   Guntur              
+
+8 rows selected.
+
+SQL> create synonym x for student_Details;
+
+Synonym created.
+
+SQL> select * from x;
+
+      SNO SNA                       SADDR               
+--------- ------------------------- --------------------
+        1 Hari                      Tirupati
+        2 Prasad                    Tirupati
+        3                           Tirupati
+        5 giridhar                  Tirupati
+        6 naveen                    Tirupati
+        7 Devi                      Tenali
+        8 Radhika                   Guntur
+       11 Jahnavi                   Guntur              
+
+8 rows selected.
+
+Droping Synonym:
+	syntax:
+	DROP SYNONYM synonymname
+
+SQL> drop synonym x;
+Synonym dropped.
+
+
+for having indetailed inforamtion regarding synonym, you have implement select statement on a system table that is USER_SYNONYMS.
+SQL> select * from user_synonyms where synonym_name='X';
+
+SYNONYM_NAME                   TABLE_OWNER                    TABLE_NAME
+------------------------------ ------------------------------ -----------
+X                              SCOTT                          EMP
+
+====================================================================
+
+Setting default value for a column during creation of table:
+syntax:	col_name datatype DEFAULT value
+SQL> create table sdinfo
+  2  (sno number,
+  3  sna varchar2(25),
+  4  saddr varchar2(25) default 'Guntur');
+
+Table created.
+
+SQL> insert into sdinfo(sno,sna)
+  2  values(1,'Venkat');
+
+1 row created.
+
+SQL> select * from sdinfo;
+
+      SNO SNA                       SADDR
+--------- ------------------------- ----------------
+        1 Venkat                    Guntur
+======================================================================
+Buffer management commands:
+	Buffer is nothing but a temperory storage area . In this the text belongs to the last completed or executed sql statement will be stored. for mananging this content we have to go for these commands.
+
+
+1. list :	shows content of buffer on screen.
+	syntax:
+	L{IST}
+	For making a particular line in buffer as current line
+	syntax:
+	L{ist}n	n means line number.
+ex:
+SQL> create table xing
+  2  sno number(3),
+  3  sna varchar2(15)
+  4  saddr varhar2(25));
+sno number(3),
+*
+ERROR at line 2:
+ORA-00922: missing or invalid option
+SQL> l
+  1  create table xing
+  2  sno number(3),
+  3  sna varchar2(15)
+  4* saddr varhar2(25))
+SQL> l2
+  2* sno number(3),
+SQL> l
+  1  create table xing
+  2  sno number(3),
+  3  sna varchar2(15)
+  4* saddr varhar2(25))
+note: defaultly the last line of buffer will be the current line. for making a particular line as current line go for second syntax. by doing this you can implement CHANGE command for doing modifications in the textof that particular line.
+
+2. CHANGE : 
+	Used to modify the content in the current line of buffer.
+	syntax:
+	C{hange}/oldtext/newtext
+3. RUN : Used to execute buffer content. before execution this one shows the content of buffer on screen.
+	syntax:
+	R{un}
+4. / : used to execute buffer content without listing the content.
+	syntax:
+	/
+5. Append : used to attach the specified text to the end of current line.
+	SYNTAX:
+	APPEND text
+ex:
+SQL> r
+  1  create table xing
+  2  (sno number(3),
+  3  sna varchar2(15)
+  4* saddr varhar2(25))
+(sno number(3),
+*
+ERROR at line 2:
+ORA-00922: missing or invalid option
+
+
+SQL> l3
+  3* sna varchar2(15)
+SQL> append ,
+  3* sna varchar2(15),
+SQL> r
+  1  create table xing
+  2  (sno number(3),
+  3  sna varchar2(15),
+  4* saddr varhar2(25))
+saddr varhar2(25))
+             *
+ERROR at line 4:
+ORA-00907: missing right parenthesis
+
+
+SQL> c/varhar/varchar
+  4* saddr varchar2(25))
+SQL> r
+  1  create table xing
+  2  (sno number(3),
+  3  sna varchar2(15),
+  4* saddr varchar2(25))
+
+Table created.
+
+6. Del : used to remove current line or range of lines from the buffer.
+	syntax:
+	DEL 
+	DEL sl el
+	sl: starting lineno
+	el: ending lineno
+7. Input: used to insert a new line after the current line.
+	syntax:
+	i{nput}
+
+	
+ex:
+SQL> l
+  1  create table xing
+  2  (sno number(3),
+  3  sna varchar2(15),
+  4* saddr varchar2(25))
+SQL> l1
+  1* create table xing
+SQL> append 1
+  1* create table xing1
+SQL> l
+  1  create table xing1
+  2  (sno number(3),
+  3  sna varchar2(15),
+  4* saddr varchar2(25))
+SQL> del 2 3
+SQL> l
+  1  create table xing1
+  2* saddr varchar2(25))
+SQL> l1
+  1*  create table xing1
+SQL> i
+  2i (stdno number,
+  3i stdname varchar2(25),
+  4i 
+SQL> r
+  1  create table xing1
+  2  (stdno number,
+  3  stdname varchar2(25),
+  4* saddr varchar2(25))
+Table Created
+SQL>
+
+8. Save : used to save the buffer content as a file.
+	syntax:
+	SAVE filename CRE{ATE} or REP{LACE} or APP{END}
+CREATE: this option saves the buffer content by creating the specified file.
+REPLACE: this one saves the buffer content in the specified existed file by erasing its content.
+APPEND: this one save the buffer content at the end of specified existed file.
+
+ex:
+SQL> create table xing
+  2  (sno number,
+  3  sna varchar2(25),
+  4  saddr varchar2(25));
+
+Table created.
+
+SQL> save c:\oracle\prs create
+Created file c:\oracle\prs
+SQL> insert into xing
+  2  values(1,'Sailaja','Guntur');
+
+1 row created.
+
+SQL> save c:\oracle\prs append
+Appended file to c:\oracle\prs
+SQL> insert into xing
+  2  values(2,'Raghu','Guntur');
+
+1 row created.
+
+SQL> save c:\oracle\prs append
+Appended file to c:\oracle\prs
+
+9)@ :  used to execute file content by loading the content command by command in the buffer.
+	syntax:	@file_name
+ex:
+SQL> @c:\oracle\prs
+Table created.
+
+1 row created.
+
+1 row created.
+10) Get: This one loads the file content into the buffer.after loading file content, shows that buffer content on screen.
+	syntax:
+	GET file_name
+=====================================================================
+HOST : used to load o/s exe files and oracle related files.
+	syntax:
+	HOST exename {filename}
+
+SQL> host notepad
+SQL> host calc
+SQL> host pbrush
+SQL> host notepad c:\oracle\oraclenotes
+=====================================================================
+Substituion Variables:
+	These are variables which will ask for values of the location during execution of command. these variable has to be used in combination of & or && in the location of values which would be supplied by the user. when we use a variable by preceeding it with &, the variable will ask for the values in every execution of that statement. Suppose if we specify &&, the variable will ask for value in very first execution of command. after hat whereever we use that variable, the value what we have given in very first execution will be taken automatically without asking user for the value.
+	syntax:	&variable_name
+		&&variable_name
+
+ex:
+SQL> select * from &x;
+Enter value for x: tab
+old   1: select * from &x
+new   1: select * from tab
+
+SQL> r
+  1* select * from &x
+Enter value for x: xing
+old   1: select * from &x
+new   1: select * from xing
+
+      SNO SNA                       SADDR
+--------- ------------------------- -------------------------
+        1 Sailaja                   Guntur
+        2 Raghu                     Guntur
+
+SQL> insert into xing
+  2  values(&sno,'&sna','&&saddr');
+Enter value for sno: 3
+Enter value for sna: Vamsi
+Enter value for saddr: Guntur
+old   2: values(&sno,'&sna','&&saddr')
+new   2: values(3,'Vamsi','Guntur')
+
+1 row created.
+
+SQL> r
+  1  insert into xing
+  2* values(&sno,'&sna','&&saddr')
+Enter value for sno: 4
+Enter value for sna: Chandu
+old   2: values(&sno,'&sna','&&saddr')
+new   2: values(4,'Chandu','Guntur')
+
+1 row created.
+
+SQL> r
+  1  insert into xing
+  2* values(&sno,'&sna','&&saddr')
+Enter value for sno: 5
+Enter value for sna: Chaitanya
+old   2: values(&sno,'&sna','&&saddr')
+new   2: values(5,'Chaitanya','Guntur')
+
+1 row created.
+
+SQL> insert into xing
+  2  values(&sno,'&sna','&saddr');
+Enter value for sno: 6
+Enter value for sna: Harika
+old   2: values(&sno,'&sna','&saddr')
+new   2: values(6,'Harika','Guntur')
+
+1 row created.
+======================================================================
+DROP TABLE : used to remove a table.
+	syntax:
+	DROP TABLE table_name
+	{CASCADE CONSTRAINTS}
+EX:
+SQL> drop table giri_uq;
+Table dropped.
+
+NOTE: once we drop a table, we can not get it back.
+======================================================================
