@@ -1,0 +1,17 @@
+NOTE
+
+1. log10(x)
+  let x be a number
+  then the value of log10(x) will give no of digits - 1
+ 
+EXAMPLE:
+  x = 12345
+ log10(12345) = 4 = no. of digits - 1
+
+2. n%10
+  let n be a number
+  then the remainder when n is divided 10 gives the last digit of the number
+
+EXAMPLE:
+  n = 5625
+  5625 % 10 = 5 = last digit 

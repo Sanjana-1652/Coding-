@@ -1,0 +1,46 @@
+https://www.guru99.com/sql.html
+========================================================================================================
+
+====================================Database Fundamentals===============================================
+ Lesson 1	What is a Database? — Definition, Meaning, Types, Example
+ Lesson 2	What is SQL? — Learn SQL Basics, SQL Full Form & How to Use
+ Lesson 3	MySQL Workbench Tutorial for Beginners — How to Install MySQL Workbench & Use Database Design
+ Lesson 1	Database Design Tutorial — Learn Data Modeling
+ Lesson 2	What is Normalization? — 1NF, 2NF, 3NF, BCNF Database Example
+ Lesson 3	What is ER Modeling? — Learn with Example
+========================================SQL Basics=======================================================
+ Lesson 1	MySQL Create Table — How to Create Database in MySQL
+ Lesson 2	MySQL SELECT Statement — Learn with Example
+ Lesson 3	MySQL WHERE Clause — AND, OR, IN, NOT IN Query Example
+ Lesson 4	MySQL INSERT INTO Query — How to add Row in Table (Example)
+ Lesson 5	MySQL DELETE Query — How to Delete Row from a Table
+ Lesson 6	MySQL UPDATE Query — Learn with Example
+==========================================Data Sorting==================================================
+ Lesson 1	ORDER BY in MySQL — DESC & ASC Query with EXAMPLE
+ Lesson 2	SQL GROUP BY and HAVING Clause — Learn with Example
+ Lesson 3	MySQL Wildcards Tutorial — Like, NOT Like, Escape, ( % ), ( _ )
+ Lesson 4	MYSQL Regular Expressions (REGEXP) — What is, Syntax and Examples
+Functions
+ Lesson 1	MySQL Functions — String, Numeric, User-Defined, Stored
+ Lesson 2	MySQL Aggregate Functions Tutorial — SUM, AVG, MAX, MIN , COUNT, DISTINCT
+Must Know Stuff!
+ Lesson 1	MySQL IS NULL & IS NOT NULL Tutorial — Learn with Example
+ Lesson 2	MySQL AUTO_INCREMENT — Learn with Example
+ Lesson 3	MYSQL - ALTER, DROP, RENAME, MODIFY — What is, Syntax with Examples
+ Lesson 4	MySQL LIMIT & OFFSET — Learn with Example
+Most Dreaded Topics!
+ Lesson 1	MySQL SubQuery Tutorial — Learn with Example
+ Lesson 2	MySQL JOINS Tutorial — INNER, OUTER, LEFT, RIGHT, CROSS
+ Lesson 3	MySQL UNION — Complete Tutorial
+ Lesson 4	MySQL Views — How to Create View from Tables with Examples
+ Lesson 5	MySQL Index Tutorial — Create, Add & Drop
+ Lesson 1	Your First Application using MySQL and PHP — Getting Started!
+ Lesson 2	Oracle MySQL 5.6 Certification — Oracle MySQL 5.6 Study Guide
+ Lesson 3	SQL vs MySQL — What's the Difference Between SQL and MySQL?
+ Lesson 4	Best SQL Tools — 25 Best SQL Tools, Database Software & IDE
+ Lesson 5	SQL Query Builders & Editor — 10 Best SQL Query Builders & Editor
+ Lesson 6	Free SQL Courses — 11 Best Free SQL Courses & Certification
+ Lesson 7	SQL Books — 14 Best SQL Books for Beginners and Experts
+ Lesson 8	SQL Cheat Sheet — SQL Commands Cheat Sheet
+ Lesson 9	SQL Interview Questions — Top 50 SQL Interview Questions and Answers
+ Lesson 10	SQL Tutorial PDF — Download SQL Tutorial PDF for Beginners

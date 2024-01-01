@@ -1,0 +1,49 @@
+UNIT-I:
+
+Introduction to Databases: Characteristics of database approach, advantages of using the
+DBMS approach.
+Overview of Database Languages and Architectures: Data models, schemas and
+instances, three schema architecture and data independence, database system environment,
+centralized and client/server architectures for DBMSs, classification of database
+management system. SQL: Data Definition,
+Constraints and Basic Queries and Updates: SQL data definition – DDL commands and
+data types, specifying constraints in SQL, INSERT, DELETE and UPDATE statements in
+SQL, basic retrieval queries in SQL.
+
+UNIT-II:
+
+Introduction to Database Design: Database Design and ER Diagrams, Entities, Attributes
+and Entity sets, Relationships and Relationship sets, Additional features of the E-R Model, 
+Conceptual Design with the ER-Model
+
+The Relational Model: Introduction to the relational model, Integrity constraints over
+relations, enforcing integrity constraints, querying relational data, Nested Queries,
+Correlated Queries, logical database design-ER to Relational.
+
+UNIT-III:
+
+Relational Algebra and Calculus: Preliminaries, relational algebra, relational calculus,
+expressive power of algebra and calculus.
+
+Schema Refinement and Normal Forms: Introduction to schema refinement, functional
+dependencies, reasoning about FDs, Normal forms (1NF, 2NF, 3NF and BCNF), properties
+of decompositions, normalization (decomposition into BCNF and 3NF), schema refinement
+in database design, other kinds of dependencies.
+
+UNIT-IV:
+
+Overview of Transaction Management & Concurrency Control: Transaction
+Management:
+The ACID properties, transactions and schedules, concurrent execution of transactions, lock
+based concurrency control, performance of locking, and transaction support in SQL,
+introduction to crash recovery.
+Concurrency Control:
+2PL, serializability and recoverability, introduction to lock management, lock conversions,
+dealing with deadlocks, specialized locking techniques, concurrency control without
+locking.
+
+UNIT-V:
+
+Storage: Overview of Storages and Indexing, Data on External Storage- File Organization
+and Indexing –Clustered Indexing – Primary and Secondary Indexes, Index Data Structures,
+Hash-Based Indexing – Tree-Based Indexing, Comparison of File Organization.
