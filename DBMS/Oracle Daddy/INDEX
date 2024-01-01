@@ -1,0 +1,673 @@
+index (large amount of data)
+====
+this mechanism is used to sort data and improving 
+the performance of the database.
+
+types of index
+-------------------
+1)duplicate index
+2)unique index
+
+
+create table employe
+(eno number(3),name varchar(15),
+salary number(9));
+
+insert into employe
+values(100,'carrel',2500);
+
+insert into employe
+values(20,'banu',4500);
+
+insert into employe
+values(1,'damin',1500);
+
+insert into employe
+values(101,'anil',3000);
+
+insert into employe
+values(1,'damin',1500);
+
+select * From employe;
+
+select * from employe
+where eno>=1;
+
+1)duplicate index
+-------------------------
+a)simple index (single column)
+b)composite index (multiple columns)
+
+create index (simple index)
+-----------------
+create index emp_ind
+on employe(eno);
+
+select * from employe;
+
+select * from employe
+where eno>=1;
+
+select * from employe
+where salary>1500;
+
+drop index
+---------------
+drop index emp_ind;
+
+select * from employe
+where eno>=1;
+
+composite index
+----------------------
+create index emp_ind
+on employe(eno,name);
+
+select * from employe
+where eno>=1;
+
+insert into employe
+values(100,'anil',3400);
+
+select * from employe
+where eno>=1;
+
+TO LIST OUT ALL INDEXES AND ITS TABLES
+===============================
+select table_name,index_name from user_indexes;
+
+select index_name from user_indexes
+where table_name='EMPLOYE';
+
+drop index
+---------------
+drop index emp_ind;
+
+select * from employe
+where eno>=1;
+
+2)unique index (simple index)
+-------------------
+create  unique index emp_ind
+on employe(eno);
+    error...duplicate keys found
+
+delete from employe where eno=100;
+delete from employe where eno=1;
+
+select * from employe;
+
+create  unique index emp_ind
+on employe(eno);
+END
+select * from employe where eno>=1;
+
+insert into employe values(1,'vasu',333);
+insert into employe values(1,'vasu',333);
+       ERROR....
+
+select * from employe;
+
+select * from employe
+where eno>=1;
+
+drop index emp_ind;
+
+composite index (table level)
+============
+create unique index  emp_ind
+on employe(eno,name);
+
+insert into employe values(1,'vasu',3333);
+ errror.....
+insert into employe values(1,'anil',4000);
+
+select * from employe;
+
+select * from employe where eno>=1;
+
+select * from employe
+where salary>=3000;
+
+
+	clusters	
+	======
+ this mechanism is used to save the disk space.
+(if the table contains many no.of duplicate values)
+
+note 
+------
+1)before going to create a cluster table , the        specified cluster must be created.
+
+2)the table column definition (type and size)
+   must be same as cluster column definition.
+
+3)before going to insert data into cluster    table, the      specified cluster must be    indexed.
+
+create cluster
+-------------------
+--single column cluster
+create cluster emp_clu
+(enum number(3));
+
+--multi column cluster
+create cluster emp_mclu
+(enum number(3),ename varchar(15));
+
+create table (cluster table)
+---------------
+SYNTAX3
+--------------
+create table emp
+(eno number(3),
+name varchar(20),salary number(9,2))
+cluster emp_clu(eno);
+
+insert into emp
+values(1,'vasu',3333);
+  error.....
+
+create index (clsuter index)
+----------------
+create index emp_cind
+on cluster emp_clu;
+
+insert into emp
+values(1,'vasu',3333);
+
+to listout all cluster names
+----------------------------------
+select cluster_name from user_clusters;
+
+drop cluster
+----------------
+drop cluster emp_clu;
+     error......cluster not empty
+drop cluster emp_mclu;
+
+drop table emp;
+drop cluster emp_clu;
+
+	=======
+create sequence
+-----------
+this command is used to create a sequence object. 
+
+pseudo columns
+-------------------
+1)nextval :
+ it will generate a sequence UNIQUE            number.
+              syntax:   seq_name.nextval
+
+2)currval :
+ it will display or insert the                    current
+                   sequence number.
+            syntax:   seq_name.currval
+
+create table employe
+(eno number(3) primary key,
+name varchar(15),
+salary number(9,2));
+
+create sequence a
+start with 100;
+
+	==or==
+create sequence a
+start with 100
+increment by 1;
+
+insert into employe
+values(a.nextval,&name,&sal);
+
+select a.currval from dual;
+==========
+eg2:
+ create sequence b
+  start with 100
+  increment by 10;
+
+delete from employe;
+
+insert into employe
+values(b.nextval,&name,&sal);
+========
+
+eg3:
+  create sequence c
+  start with 100
+  increment by 10
+  maxvalue 150;
+
+delete from employe;
+
+insert into employe
+values(c.nextval,&name,&sal);
+
+insert into employe(eno)
+values(c.nextval);
+==========
+eg4:
+create sequence e
+start with 100
+increment by 10
+maxvalue 150
+minvalue 100
+cycle
+cache 2;
+
+eg5:
+create sequence d
+start with 100
+increment by -10
+maxvalue 100
+minvalue 50
+cycle
+cache 2;
+
+insert into employe(eno)
+values(d.nextval);
+		=stop==
+view
+====
+create or replace [force] view <view_name>
+as query
+[with check option];
+
+view is a logical or virtual table.
+
+
+types of views
+-----------------
+1)updatable views
+2)readonly veiws
+
+1)updatable views
+------------------------
+you can perform all dmlc operations on this view.
+
+create table employe
+(eno number(3),
+name varchar(15),
+job varchar(15),
+salary number(9),
+bonus number(9));
+
+insert into employe values(1,'vasu','clerk',2000,200);
+
+eg1: (hiding columns)
+=================
+ create or replace view emp_view
+as select eno,name,job from employe; 
+
+select * from employe;
+select * from emp_view;
+
+to display the all views
+=================
+select view_name from user_views;
+
+select view_name,text from user_views
+where view_name='EMP_VIEW';
+
+select * from emp_view;
+
+insert into emp_view
+values(100,'rajesh','manager');
+
+select * from employe;
+
+force
+------------
+this keyword is used to create a view, without having a base table.
+
+drop table employe;
+
+create or replace view emp_view
+as select * from employe;
+     error...table or view does not exist
+
+create or replace force view emp_view
+as select * from employe;
+   warning : view created with compilation errors
+
+create table employe
+(eno number(3),
+name varchar(15),
+job varchar(15),
+salary number(9),
+bonus number(9));
+
+insert into employe values(1,'vasu','clerk',2000,200);
+
+select * from emp_view;
+
+view with check option
+==================
+create or replace view yv2
+as select * from employe
+ where salary between 1500 and 8000
+with check option;
+
+insert into yv2
+values(111,'vamsi','ldc',1000,500);
+  error....
+
+insert into yv2
+values(111,'vamsi','ldc',1500,500);
+
+	==stop===
+
+SECURITY MANAGEMENT COMMANDS
+	         OR
+DATA CONTROL LANGUAGE COMMANDS (DCLC)
+===================================
+NOTE:
+ BEFORE EXECUTING ALL THESE COMMANDS, THE USER MUST HAVE DBA PRIVILEGES.
+
+LOGON
+-----------
+USER NAME        : SYSTEM
+PASSWORD         : MANAGER
+host  string             : ORA8
+
+1)SYSTEM PRIVILEGES
+------------------------------------
+CREATE USER
+ALTER USER
+DROP USER
+GRANT - I
+REVOKE - I
+
+SQL*PLUS COMMANDS
+-----------------------------------
+CONNECT
+DISCONNECT
+SHOW USER
+
+
+LOGON
+--------------
+USER NAME     : SCOTT
+PASSWORD      : TIGER
+
+1)CREATE USER
+------------------------
+CREATE USER GEETHA IDENTIFIED BY GEETH;
+         ERROR.......
+
+2)CONNECT
+-------------------
+CONNECT SYSTEM/MANAGER@ORA8
+
+CREATE USER GEETHA IDENTIFIED BY GEETH;
+
+3)SHOW USER
+-----------------------
+SHOW USER
+
+CONNECT GEETHA/GEETH@ORA8
+       ERROR.....
+
+SHOW USER
+
+CONNECT SYSTEM/MANAGER@ORA8
+
+4)GRANT- I
+--------------
+GRANT CONNECT TO GEETHA;
+
+CONNECT GEETHA/GEETH@ORA8
+
+SHOW USER
+
+CREATE TABLE EMP
+(ENO NUMBER(3));
+       ERROR.....NO TABLE SPACE
+
+CONNECT SYSTEM/MANAGER@ORA8
+GRANT RESOURCE TO GEETHA;
+
+CONNECT GEETHA/GEETH@ORA8
+CREATE TABLE EMPLOYE
+(ENO NUMBER(3),NAME VARCHAR(15));
+
+5)REVOKE-I
+--------------------
+CONNECT SYSTEM/MANAGER@ORA8
+
+REVOKE CONNECT,RESOURCE FROM GEETHA;
+
+CONNECT GEETHA/GEETH@ORA8
+      ERROR.......
+
+ALTER USER
+--------------------
+CONNECT SYSTEM/MANAGER@ORA8
+
+ALTER USER GEETHA IDENTIFIED BY G;
+
+CONNECT GEETHA/GEETH@ORA8
+       error......
+
+connect geetha/g@ora8
+
+drop user
+------------
+connect system/manager@ora8
+
+drop user geetha;
+drop user geetha cascade;
+
+note:
+  cascade  is used to delete all database objects   from the user.
+	=====stop=====
+
+2)OBJECT PRIVILEGES
+====================
+GRANT -II
+==========
+USER  : GEETHA
+
+GRANT INSERT,SELECT ON STUDENT TO SCOTT;
+
+CONNECT SCOTT/TIGER
+
+SELECT * FROM GEETHA.STUDENT;
+
+INSERT INTO GEETHA.STUDENT
+VALUES(111,'VASU',44,45,66);
+
+DELETE FROM GEETHA.STUDENT;
+      ERROR.........
+
+
+REVOKE-II
+==========
+CONNECT GEETHA/GEETH
+
+REVOKE ALL ON STUDENT FROM SCOTT;
+
+CONNECT SCOTT/TIGER
+
+SELECT * FROM GEETHA.STUDENT;
+
+INSERT INTO GEETHA.STUDENT
+VALUES(111,'VASU',44,45,66);
+
+ALL : INSERT,DELETE ,UPDATE,SELECT,INDEX,ALTER
+
+
+ALTER USER (CHANGE THE PASSWORD)
+---------------------
+CONNECT GEETHA/GEETH;
+
+ALTER USER SCOTT IDENTIFIED BY LION;
+
+ALTER USER SCOTT IDENTIFIED BY TIGER;
+
+
+DROP USER
+-----------------
+CONNECT SYSTEM/PRS321;
+
+DROP USER GEETHA;
+
+DROP USER GEETHA CASCADE;
+
+
+
+
+synonym
+-----------
+is a mirror image of a table.
+syn :-
+create synonym synonym-name for table;
+types of synonyms
+==============
+1)private : created by the user.
+------------
+create synonym stud for scott.student;
+
+select * from stud;
+select * from student;
+
+insert into stud
+values(100,'ramu',40,50,60);
+
+select * from student;
+
+drop table stud;
+ error....
+drop synonym stud;
+
+select * from student;
+
+2)public : created by the dba.
+-----------
+user :dba
+------ ------
+select * from scott.emp;
+create public synonym emp
+for scott.emp;
+
+select * from emp;
+insert into emp
+values(101,'siva','clerk',3000);
+
+user:scott
+------------
+select * from dba.emp;
+ error....
+select * from emp;
+=		======
+
+to list out all database objects
+======================
+select * from tab;
+
+select * From tab where tabtype='VIEW';
+select * From tab where tabtype='TABLE';
+select * From tab where tabtype='SYNONYM';
+
+to list out all tables informaion
+======================
+select table_name from user_tables;
+select table_name from user_tables
+where table_name like 'E%';
+
+to list out all views 
+===============
+select view_name,text from user_views;
+
+to list out all synonyms
+==================
+select synonym_name from user_synonyms;
+
+to list out all indexes
+=================
+select index_name from user_indexes;
+
+to list out all sequence
+=================
+select sequence_name from user_sequences;
+
+to list out all clusters
+================
+select cluster_name from user_clusters;
+
+
+transaction control language commands (tclc)
+============================== 
+commit
+rollback
+savepoint
+
+1)commit
+-------------
+create table test
+(eno number(3),name varchar(15));
+
+insert into test 
+values(100,'vasu');
+
+commit;
+
+insert into test
+values(101,'rajesh');
+
+select * from test;
+
+rollback
+=======
+delete from test;
+select * from test;
+rollback;
+select * from test;
+
+savepoint
+-------------
+insert into test values(1,'siva');
+insert into test values(2,'rakesh');
+
+select * from test;
+
+savepoint a;
+   insert into test values(999,'bosu');
+   insert into test values(888,'srinu');
+select * from test;
+  
+savepoint b;
+ update test set name='rahul';
+ insert into test values(333,'sss');
+ select * from test;
+
+savepoint c;
+  delete from test;
+select * from test;
+
+
+rollback to c;
+select * From test;
+
+rollback to b;
+select * From test;
+
+ rollback to a;
+ select * From test;
+
+
+truncate table
+===========
+this command is used to delete all rows permanentlly.
+
+
+delete from test;
+select * from test;
+rollback;
+select * from test;
+
+
+truncate table test;
+rollback;
+select * from test;
